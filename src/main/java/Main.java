@@ -1,6 +1,6 @@
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import responses.HttpResponseCode;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -21,14 +21,47 @@ public class Main {
        Socket clientSocket = serverSocket.accept(); // Wait for connection from client.
        System.out.println("accepted new connection");
 
-//       clientSocket.getOutputStream().write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
-       OutputStream out = clientSocket.getOutputStream();
-       out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
 
-       serverSocket.close();
-       clientSocket.close();
+       BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+       OutputStream out = clientSocket.getOutputStream();
+       String clientMessage = in.readLine();
+
+       String[] message = parseMessage(clientMessage);
+
+       String request = message[0];
+       String[] requestLine = request.split(" ");
+
+       String target = requestLine[1];
+
+       StringBuilder respone = new StringBuilder(HttpResponseCode.httpVersion);
+       respone.append(" ");
+
+       if("/".equals(target)) {
+            respone.append(HttpResponseCode.http200)
+                    .append(HttpResponseCode.crlf)
+                    .append(HttpResponseCode.crlf);
+       }
+       else {
+           respone.append(HttpResponseCode.http404)
+                   .append(HttpResponseCode.crlf)
+                   .append(HttpResponseCode.crlf);
+       }
+
+       out.write(respone.toString().getBytes());
+
+
+//       clientSocket.getOutputStream().write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
+//       OutputStream out = clientSocket.getOutputStream();
+//       out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+
+
      } catch (IOException e) {
        System.out.println("IOException: " + e.getMessage());
      }
   }
+
+    private static String[] parseMessage(String clientMessage) {
+      return clientMessage.split(HttpResponseCode.crlf);
+
+    }
 }
