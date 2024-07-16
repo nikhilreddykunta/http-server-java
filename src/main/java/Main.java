@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,9 +21,9 @@ public class Main {
        Socket clientSocket = serverSocket.accept(); // Wait for connection from client.
        System.out.println("accepted new connection");
 
-//       clientSocket.getOutputStream();
-       PrintWriter out = new PrintWriter(clientSocket.getOutputStream());
-       out.write("HTTP/1.1 200 OK\\r\\n\\r\\n");
+//       clientSocket.getOutputStream().write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
+       OutputStream out = clientSocket.getOutputStream();
+       out.write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
 
        serverSocket.close();
        clientSocket.close();
