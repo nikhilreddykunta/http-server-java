@@ -23,7 +23,7 @@ public class Main {
 
 //       clientSocket.getOutputStream().write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
        OutputStream out = clientSocket.getOutputStream();
-       out.write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
+       out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
 
        serverSocket.close();
        clientSocket.close();
