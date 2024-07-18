@@ -47,16 +47,9 @@ public class Main {
 
 
 
-            String[] message = parseMessage(clientMessage);
 
-            //read request line
-            String request = message[0];
 
-            //split request line
-            String[] requestLine = request.split(" ");
 
-            //read request endpoint
-            String target = requestLine[1];
 
             StringBuilder response = new StringBuilder(HttpResponseCode.httpVersion);
             response.append(" ");
@@ -130,8 +123,4 @@ public class Main {
         }
     }
 
-    private static String[] parseMessage(String clientMessage) {
-        return clientMessage.split(HttpResponseCode.crlf);
-
-    }
 }

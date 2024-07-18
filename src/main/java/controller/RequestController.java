@@ -1,8 +1,14 @@
 package controller;
 
-import responseFormat.Response;
+import lombok.Getter;
+import lombok.Setter;
+import requestFormat.Request;
 
-public interface RequestController {
 
-    public Response processRequest();
+public abstract class RequestController {
+
+    public StringBuilder response;
+    public Request request;
+
+    public abstract String processRequest();
 }
