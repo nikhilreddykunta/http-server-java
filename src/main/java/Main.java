@@ -24,10 +24,21 @@ public class Main {
 
        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
        OutputStream out = clientSocket.getOutputStream();
+
        String clientMessage = in.readLine();
+       clientMessage += HttpResponseCode.crlf;
+       clientMessage += in.readLine();
+         clientMessage += HttpResponseCode.crlf;
+         clientMessage += in.readLine();
+         clientMessage += HttpResponseCode.crlf;
+         clientMessage += in.readLine();
+         clientMessage += HttpResponseCode.crlf;
+
+         System.out.println("Client message: "+clientMessage);
 
        String[] message = parseMessage(clientMessage);
 
+       //request line
        String request = message[0];
        String[] requestLine = request.split(" ");
 
@@ -57,6 +68,33 @@ public class Main {
                     .append(str);
 //                    .append(HttpResponseCode.crlf);
          System.out.println("Response: "+respone);
+
+       }
+       else if("/user-agent".equals(target)) {
+           System.out.println("processing user-agent request");
+            String userAgent = null;
+
+           System.out.println("Message length: "+message.length);
+
+            for(int i=1; i<message.length; i++) {
+                System.out.print("checking for user-agent");
+                if(message[i].contains("User-Agent")) {
+                    String tmp = message[i];
+                    userAgent = tmp.substring(12);
+                    System.out.println("User-Agent: "+userAgent);
+                    break;
+                }
+            }
+
+           respone.append(HttpResponseCode.http200)
+                   .append(HttpResponseCode.crlf)
+                   .append("Content-Type: text/plain")
+                   .append(HttpResponseCode.crlf)
+                   .append("Content-Length: ")
+                   .append(userAgent.length())
+                   .append(HttpResponseCode.crlf)
+                   .append(HttpResponseCode.crlf)
+                   .append(userAgent);
 
        }
        else {
