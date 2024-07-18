@@ -27,12 +27,12 @@ public class Main {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            String clientMessage = null;
+            StringBuilder clientMessage = new StringBuilder();
 
-            for (String msg = in.readLine(); !msg.equals(""); ) {
+            for (String msg = in.readLine(); msg != null || !msg.equals(""); ) {
                 System.out.println("reading msg: " + msg);
-                clientMessage += msg;
-                clientMessage += HttpResponseCode.crlf;
+                clientMessage.append(msg);
+                clientMessage.append(HttpResponseCode.crlf);
 
                 msg = in.readLine();
             }
