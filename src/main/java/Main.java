@@ -41,6 +41,24 @@ public class Main {
                     .append(HttpResponseCode.crlf)
                     .append(HttpResponseCode.crlf);
        }
+       else if(target.contains("echo")) {
+         System.out.println("processing echo request");
+            String[] requestParams = target.split("/");
+            String str = requestParams[requestParams.length-1];
+
+            respone.append(HttpResponseCode.http200)
+                    .append(HttpResponseCode.crlf)
+                    .append("Content-Type: text/plain")
+                    .append(HttpResponseCode.crlf)
+                    .append("Content-Length: ")
+                    .append(str.length())
+                    .append(HttpResponseCode.crlf)
+                    .append(HttpResponseCode.crlf)
+                    .append(str);
+//                    .append(HttpResponseCode.crlf);
+         System.out.println("Response: "+respone);
+
+       }
        else {
            respone.append(HttpResponseCode.http404)
                    .append(HttpResponseCode.crlf)
@@ -53,6 +71,9 @@ public class Main {
 //       clientSocket.getOutputStream().write("HTTP/1.1 200 OK\\r\\n\\r\\n".getBytes());
 //       OutputStream out = clientSocket.getOutputStream();
 //       out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+
+       clientSocket.close();
+       serverSocket.close();
 
 
      } catch (IOException e) {
