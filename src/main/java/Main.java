@@ -1,9 +1,11 @@
+import handler.RequestHandler;
 import responses.HttpResponseCode;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,26 +21,31 @@ public class Main {
             // ensures that we don't run into 'Address already in use' errors
             serverSocket.setReuseAddress(true);
 
-            Socket clientSocket = serverSocket.accept(); // Wait for connection from client.
-            System.out.println("accepted new connection");
+            ExecutorService es = Executors.newFixedThreadPool(10);
 
-            OutputStream out = clientSocket.getOutputStream();
-
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            StringBuilder clientMessageBuilder = new StringBuilder();
-
-            for (String msg = in.readLine(); msg != null && !msg.equals(""); ) {
-                System.out.println("reading msg: " + msg);
-                clientMessageBuilder.append(msg);
-                clientMessageBuilder.append(HttpResponseCode.crlf);
-
-                msg = in.readLine();
+            while(true) {
+                System.out.println("Waiting for connection");
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Connection accepted");
+                RequestHandler requestHandler = new RequestHandler(clientSocket);
+                es.execute(requestHandler);
+                System.out.println("Spawned a new thread for processing request");
             }
 
-            String clientMessage = clientMessageBuilder.toString();
-            System.out.println("Client message: " + clientMessage);
+
+            System.out.println("accepted new connection");
+
+
+
+
+
+
+
+
+
+
+
+
 
             String[] message = parseMessage(clientMessage);
 
