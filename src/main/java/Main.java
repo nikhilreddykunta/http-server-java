@@ -27,16 +27,17 @@ public class Main {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            StringBuilder clientMessage = new StringBuilder();
+            StringBuilder clientMessageBuilder = new StringBuilder();
 
-            for (String msg = in.readLine(); msg != null || !msg.equals(""); ) {
+            for (String msg = in.readLine(); msg != null && !msg.equals(""); ) {
                 System.out.println("reading msg: " + msg);
-                clientMessage.append(msg);
-                clientMessage.append(HttpResponseCode.crlf);
+                clientMessageBuilder.append(msg);
+                clientMessageBuilder.append(HttpResponseCode.crlf);
 
                 msg = in.readLine();
             }
 
+            String clientMessage = clientMessageBuilder.toString();
             System.out.println("Client message: " + clientMessage);
 
             String[] message = parseMessage(clientMessage);
