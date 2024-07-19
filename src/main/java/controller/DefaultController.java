@@ -4,15 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import requestFormat.Request;
 import responseFormat.Response;
 import responses.HttpResponseCode;
 
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 //To handle default / request
 public class DefaultController extends RequestController{
+
+    public DefaultController() {
+        super();
+    }
+
+    public DefaultController(Request request) {
+        super(request);
+    }
 
     @Override
     public String processRequest() {

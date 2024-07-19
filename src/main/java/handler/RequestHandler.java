@@ -37,16 +37,19 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
-        initialize();
-        readRequest();
-        parseRequest();
-        processRequest();
 
         try {
             out = clientSocket.getOutputStream();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        initialize();
+        readRequest();
+        parseRequest();
+        processRequest();
+
+
     }
 
     private void initialize() {
@@ -97,7 +100,13 @@ public class RequestHandler implements Runnable {
     }
 
     private void parseRequestHeader(String[] message) {
-        for(int i=1; i< message.length-1; i++) {
+
+        System.out.println("In RequestHandler -> parseRequestHeader");
+        System.out.println("Message length: "+message.length);
+
+
+        for(int i=1; i< message.length; i++) {
+            System.out.println("message: "+message[i]);
             if(message[i].contains("User-Agent")) {
                 this.requestHeader.setUserAgent(message[i].trim());
             }
@@ -115,20 +124,35 @@ public class RequestHandler implements Runnable {
     }
 
     private void processRequest() {
+
+        Request request = new Request(requestLine, requestHeader, requestBody);
         if(requestLine.getRequestUrl().contains("/echo")) {
-            requestController = new EchoController();
+            requestController = new EchoController(request);
         }
         else if(requestLine.getRequestUrl().contains("/user-agent")) {
-            requestController = new UserAgentController();
+            requestController = new UserAgentController(request);
         }
         else if("/".equals(requestLine.getRequestUrl())) {
-            requestController = new DefaultController();
+            requestController = new DefaultController(request);
         }
         else {
-            requestController = new NotFoundController();
+            requestController = new NotFoundController(request);
         }
 
         response = requestController.processRequest();
+
+        try {
+            out.write(response.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
 
     }
