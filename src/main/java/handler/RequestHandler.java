@@ -120,6 +120,7 @@ public class RequestHandler implements Runnable {
     }
 
     private void parseRequestBody(String s) {
+        System.out.println("request body: "+s);
         this.requestBody.setBody(s);
     }
 
@@ -131,6 +132,9 @@ public class RequestHandler implements Runnable {
         }
         else if(requestLine.getRequestUrl().contains("/user-agent")) {
             requestController = new UserAgentController(request);
+        }
+        else if(requestLine.getRequestUrl().contains("/files")) {
+            requestController = new FilesController(request);
         }
         else if("/".equals(requestLine.getRequestUrl())) {
             requestController = new DefaultController(request);
