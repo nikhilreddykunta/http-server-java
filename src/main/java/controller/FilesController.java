@@ -10,6 +10,10 @@ import java.nio.file.Paths;
 
 public class FilesController extends RequestController{
 
+    private static final String directory =
+//            "D:\\misc\\";
+            "/tmp/data/codecrafters.io/http-server-tester/";
+
     public FilesController() {
         super();
     }
@@ -22,7 +26,7 @@ public class FilesController extends RequestController{
 
         String[] requestUrl = this.request.getRequestLine().getRequestUrl().split("/");
 
-        String fileName = requestUrl[1];
+        String fileName = requestUrl[requestUrl.length-1];
 
         boolean fileExists = checkFilesExists(fileName);
 
@@ -49,7 +53,7 @@ public class FilesController extends RequestController{
     private String okResponse(String fileName) {
 
         StringBuilder fileContent = new StringBuilder();
-        File file = new File("/tmp/"+fileName);
+        File file = new File(directory+fileName);
         BufferedReader br = null;
         try {
             br = new BufferedReader(
@@ -100,7 +104,10 @@ public class FilesController extends RequestController{
 
     private boolean checkFilesExists(String fileName) {
 
-        Path path = Paths.get("/tmp/"+fileName);
+        String fullPath = directory+fileName;
+
+        Path path = Paths.get(fullPath);
+        System.out.println("path: "+path);
 
         return Files.exists(path);
     }
