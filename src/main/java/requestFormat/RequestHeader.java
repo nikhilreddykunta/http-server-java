@@ -11,4 +11,6 @@ public class RequestHeader {
     String host;
     String userAgent;
     String accept;
+    String contentType;
+    String contentLength;
 }

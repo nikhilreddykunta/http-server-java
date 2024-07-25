@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 public class FilesController extends RequestController{
 
     private static final String directory =
-//            "D:\\misc\\";
-            "/tmp/data/codecrafters.io/http-server-tester/";
+            "D:\\misc\\";
+//            "/tmp/data/codecrafters.io/http-server-tester/";
 
     public FilesController() {
         super();
@@ -28,6 +28,19 @@ public class FilesController extends RequestController{
 
         String fileName = requestUrl[requestUrl.length-1];
 
+        if("GET".equals(request.getRequestLine().getRequestType() )){
+            return processGetRequest(fileName);
+        }
+        else if("POST".equals(request.getRequestLine().getRequestType() )) {
+            return processPostRequest(fileName);
+        }
+
+        return response.toString();
+    }
+
+
+
+    private String processGetRequest(String fileName) {
         boolean fileExists = checkFilesExists(fileName);
 
         if(fileExists) {
@@ -36,8 +49,43 @@ public class FilesController extends RequestController{
         else {
             return notFoundResponse(fileName);
         }
+    }
 
-//        return response.toString();
+    private String processPostRequest(String fileName) {
+
+        Path newFilePath = Paths.get(directory+fileName);
+        BufferedWriter br = null;
+
+        if(!checkFilesExists(fileName)) {
+            try {
+                Files.createFile(newFilePath);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            br = new BufferedWriter(new FileWriter(directory+fileName));
+            br.write(request.getRequestBody().getBody());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        response.append(HttpResponseCode.httpVersion)
+                .append(" ")
+                .append(HttpResponseCode.http201)
+                .append(HttpResponseCode.crlf)
+                .append(HttpResponseCode.crlf);
+
+        return response.toString();
     }
 
     private String notFoundResponse(String fileName) {
@@ -54,6 +102,7 @@ public class FilesController extends RequestController{
 
         StringBuilder fileContent = new StringBuilder();
         File file = new File(directory+fileName);
+
         BufferedReader br = null;
         try {
             br = new BufferedReader(
