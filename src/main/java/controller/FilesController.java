@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 public class FilesController extends RequestController{
 
     private static final String directory =
-            "D:\\misc\\";
-//            "/tmp/data/codecrafters.io/http-server-tester/";
+//            "D:\\misc\\";
+            "/tmp/data/codecrafters.io/http-server-tester/";
 
     public FilesController() {
         super();
