@@ -127,20 +127,27 @@ public class RequestHandler implements Runnable {
 
     private void parseRequestBody(String s) {
 
-        StringBuilder body = new StringBuilder();
-        int contentLenght = Integer.parseInt(this.requestHeader.getContentLength().substring(16));
+        if("POST".equals(this.requestLine.getRequestType())) {
+            StringBuilder body = new StringBuilder();
+            int contentLenght = Integer.parseInt(this.requestHeader.getContentLength().substring(16));
 
-        try {
-            for(int i=0; i<contentLenght; i++) {
+            try {
+                for(int i=0; i<contentLenght; i++) {
 
                     body.append((char)in.read());
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            this.requestBody.setBody(body.toString());
+            System.out.println("request body: "+body.toString());
         }
 
-        this.requestBody.setBody(body.toString());
-        System.out.println("request body: "+body.toString());
+        else {
+            this.requestBody.setBody(s.toString());
+        }
+
     }
 
     private void processRequest() {
