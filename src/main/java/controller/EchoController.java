@@ -1,5 +1,6 @@
 package controller;
 
+import compression.GzipCompression;
 import compression.SupportedCompressions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,10 +40,8 @@ public class EchoController extends RequestController{
 
         //response header
         response.append("Content-Type: text/plain")
-                .append(HttpResponseCode.crlf)
-                .append("Content-Length: ")
-                .append(str.length())
                 .append(HttpResponseCode.crlf);
+
 
         String compressionType = null;
         System.out.println("Accept-Encoding content:"+this.request.getRequestHeader().getAccceptEncoding());
@@ -53,11 +52,31 @@ public class EchoController extends RequestController{
                     .append(HttpResponseCode.crlf);
         }
 
-        //response header end
-        response.append(HttpResponseCode.crlf);
 
 
-        response.append(str);
+        if(compressionType != null){
+            String compressedResponse = new GzipCompression().compress(str);
+            System.out.println(compressedResponse);
+
+            response.append("Content-Length: ")
+                    .append(compressedResponse.length())
+                    .append(HttpResponseCode.crlf);
+
+            //response header end
+            response.append(HttpResponseCode.crlf);
+
+            response.append(compressedResponse);
+        }
+        else {
+            response.append("Content-Length: ")
+                    .append(str.length())
+                    .append(HttpResponseCode.crlf);
+
+            //response header end
+            response.append(HttpResponseCode.crlf);
+            response.append(str);
+        }
+
 
         return response.toString();
     }
