@@ -122,6 +122,9 @@ public class RequestHandler implements Runnable {
             else if(message[i].contains("Content-Length")) {
                 this.requestHeader.setContentLength(message[i].trim());
             }
+            else if(message[i].contains("Accept-Encoding")) {
+                this.requestHeader.setAccceptEncoding(message[i].trim());
+            }
         }
     }
 

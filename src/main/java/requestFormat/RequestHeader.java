@@ -13,4 +13,5 @@ public class RequestHeader {
     String accept;
     String contentType;
     String contentLength;
+    String accceptEncoding;
 }
