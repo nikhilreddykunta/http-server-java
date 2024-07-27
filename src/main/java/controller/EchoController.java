@@ -67,6 +67,7 @@ public class EchoController extends RequestController{
         System.out.println("checking compressionSupported");
         System.out.println("Accept-Encoding from client:" + accceptEncoding);
         System.out.println("Supported compressions: " +compressionTypes.toString());
+
         //substring after "Accept-Encoding: "
         accceptEncoding = accceptEncoding.substring(17);
         String[] clientCompressions = accceptEncoding.split(",");
