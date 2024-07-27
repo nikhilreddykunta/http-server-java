@@ -2,7 +2,7 @@ package compression;
 
 public interface Compress {
 
-    public String compress(String data);
+    public byte[] compress(String data);
 
-    public String decompress(String data);
+    public String decompress(byte[] data);
 }

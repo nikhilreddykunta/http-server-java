@@ -10,6 +10,7 @@ import requestFormat.Request;
 import responseFormat.Response;
 import responses.HttpResponseCode;
 
+import java.util.Arrays;
 import java.util.Set;
 
 @Setter
@@ -55,17 +56,19 @@ public class EchoController extends RequestController{
 
 
         if(compressionType != null){
-            String compressedResponse = new GzipCompression().compress(str);
-            System.out.println(compressedResponse);
+            byte[] compressedResponse = new GzipCompression().compress(str);
+            String decompressedResponse = new GzipCompression().decompress(compressedResponse);
+            System.out.println("Compressed response: "+compressedResponse.toString());
+            System.out.println("Decomprossed response: "+decompressedResponse);
 
             response.append("Content-Length: ")
-                    .append(compressedResponse.length())
+                    .append(compressedResponse.toString().length())
                     .append(HttpResponseCode.crlf);
 
             //response header end
             response.append(HttpResponseCode.crlf);
 
-            response.append(compressedResponse);
+            response.append(compressedResponse.toString());
         }
         else {
             response.append("Content-Length: ")
