@@ -68,7 +68,7 @@ public class EchoController extends RequestController{
             //response header end
             response.append(HttpResponseCode.crlf);
 
-            response.append(compressedResponse.toString());
+            response.append(compressedResponse);
         }
         else {
             response.append("Content-Length: ")
