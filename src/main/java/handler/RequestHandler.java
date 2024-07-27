@@ -113,6 +113,10 @@ public class RequestHandler implements Runnable {
             else if(message[i].contains("Host")) {
                 this.requestHeader.setHost(message[i].trim());
             }
+            else if(message[i].contains("Accept-Encoding")) {
+                System.out.println("Setting Accept-Encoding in header: "+message[i]);
+                this.requestHeader.setAccceptEncoding(message[i].trim());
+            }
             else if(message[i].contains("Accept")) {
                 this.requestHeader.setAccept(message[i].trim());
             }
@@ -122,9 +126,7 @@ public class RequestHandler implements Runnable {
             else if(message[i].contains("Content-Length")) {
                 this.requestHeader.setContentLength(message[i].trim());
             }
-            else if(message[i].contains("Accept-Encoding")) {
-                this.requestHeader.setAccceptEncoding(message[i].trim());
-            }
+
         }
     }
 

@@ -41,8 +41,13 @@ public class EchoController extends RequestController{
         response.append("Content-Type: text/plain")
                 .append(HttpResponseCode.crlf)
                 .append("Content-Length: ")
-                .append(str.length());
-        String compressionType = compressionSupported(this.request.getRequestHeader().getAccceptEncoding(), SupportedCompressions.getCompressionTypes());
+                .append(str.length())
+                .append(HttpResponseCode.crlf);
+
+        String compressionType = null;
+        System.out.println("Accept-Encoding content:"+this.request.getRequestHeader().getAccceptEncoding());
+        if(this.request.getRequestHeader().getAccceptEncoding() != null)
+            compressionType = compressionSupported(this.request.getRequestHeader().getAccceptEncoding(), SupportedCompressions.getCompressionTypes());
         if(compressionType != null) {
             response.append("Content-Encoding: gzip")
                     .append(HttpResponseCode.crlf);
@@ -60,12 +65,16 @@ public class EchoController extends RequestController{
 
     private String compressionSupported(String accceptEncoding, Set<String> compressionTypes) {
 
+        System.out.println("checking compressionSupported");
+        System.out.println("Accept-Encoding from client:" + accceptEncoding);
+        System.out.println("Supported compressions: " +compressionTypes.toString());
         //substring after "Accept-Encoding: "
         accceptEncoding = accceptEncoding.substring(17);
         String[] clientCompressions = accceptEncoding.split(",");
 
         for(String s : clientCompressions) {
             if(compressionTypes.contains(s.trim())){
+                System.out.println("Compression Type supported: "+s);
                 return s.trim();
             }
         }
