@@ -54,8 +54,7 @@ public class EchoController extends RequestController{
         }
 
         //response header end
-        response.append(HttpResponseCode.crlf)
-                .append(HttpResponseCode.crlf);
+        response.append(HttpResponseCode.crlf);
 
 
         response.append(str);
