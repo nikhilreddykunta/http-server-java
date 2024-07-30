@@ -59,7 +59,7 @@ public class EchoController extends RequestController{
             byte[] compressedResponse = new GzipCompression().compress(str);
             String decompressedResponse = new GzipCompression().decompress(compressedResponse);
             System.out.println("Compressed response: "+compressedResponse.toString());
-            System.out.println("Decomprossed response: "+decompressedResponse);
+            System.out.println("Decompressed response: "+decompressedResponse);
 
             response.append("Content-Length: ")
                     .append(compressedResponse.toString().length())
@@ -68,7 +68,7 @@ public class EchoController extends RequestController{
             //response header end
             response.append(HttpResponseCode.crlf);
 
-            response.append(compressedResponse);
+            response.append(compressedResponse.toString());
         }
         else {
             response.append("Content-Length: ")
