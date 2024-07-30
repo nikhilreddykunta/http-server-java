@@ -42,7 +42,6 @@ public class EchoController extends RequestController{
                 .append(HttpResponseCode.crlf);
 
         //response header
-
         String compressionType = null;
         System.out.println("Accept-Encoding content:"+this.request.getRequestHeader().getAccceptEncoding());
         if(this.request.getRequestHeader().getAccceptEncoding() != null)
@@ -62,7 +61,7 @@ public class EchoController extends RequestController{
             System.out.println("Decompressed response: "+decompressedResponse);
 
             response.append("Content-Length: ")
-                    .append(compressedResponse.toString().length())
+                    .append(compressedResponse.length)
                     .append(HttpResponseCode.crlf);
 
             //response header end
