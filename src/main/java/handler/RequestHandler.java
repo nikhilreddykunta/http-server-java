@@ -177,6 +177,7 @@ public class RequestHandler implements Runnable {
         response = requestController.processRequest();
 
         try {
+            System.out.println("Response before sending to client: "+response);
             out.write(response.getBytes("UTF-8"));
         } catch (IOException e) {
             throw new RuntimeException(e);

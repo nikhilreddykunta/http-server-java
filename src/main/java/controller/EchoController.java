@@ -40,9 +40,6 @@ public class EchoController extends RequestController{
                 .append(HttpResponseCode.crlf);
 
         //response header
-        response.append("Content-Type: text/plain")
-                .append(HttpResponseCode.crlf);
-
 
         String compressionType = null;
         System.out.println("Accept-Encoding content:"+this.request.getRequestHeader().getAccceptEncoding());
@@ -53,12 +50,13 @@ public class EchoController extends RequestController{
                     .append(HttpResponseCode.crlf);
         }
 
-
+        response.append("Content-Type: text/plain")
+                .append(HttpResponseCode.crlf);
 
         if(compressionType != null){
             byte[] compressedResponse = new GzipCompression().compress(str);
             String decompressedResponse = new GzipCompression().decompress(compressedResponse);
-            System.out.println("Compressed response: "+compressedResponse.toString());
+            System.out.println("Compressed response: "+compressedResponse);
             System.out.println("Decompressed response: "+decompressedResponse);
 
             response.append("Content-Length: ")
@@ -68,7 +66,7 @@ public class EchoController extends RequestController{
             //response header end
             response.append(HttpResponseCode.crlf);
 
-            response.append(compressedResponse.toString());
+            response.append(compressedResponse);
         }
         else {
             response.append("Content-Length: ")
