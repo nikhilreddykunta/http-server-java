@@ -159,7 +159,9 @@ public class RequestHandler implements Runnable {
 
         Request request = new Request(requestLine, requestHeader, requestBody);
         if(requestLine.getRequestUrl().contains("/echo")) {
-            requestController = new EchoController(request);
+            requestController = new EchoController(request, out);
+            requestController.processRequest();
+            return;
         }
         else if(requestLine.getRequestUrl().contains("/user-agent")) {
             requestController = new UserAgentController(request);

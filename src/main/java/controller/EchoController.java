@@ -10,6 +10,8 @@ import requestFormat.Request;
 import responseFormat.Response;
 import responses.HttpResponseCode;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -23,8 +25,8 @@ public class EchoController extends RequestController{
         super();
     }
 
-    public EchoController(Request request) {
-        super(request);
+    public EchoController(Request request, OutputStream out) {
+        super(request, out);
     }
 
     @Override
@@ -65,8 +67,12 @@ public class EchoController extends RequestController{
 
             //response header end
             response.append(HttpResponseCode.crlf);
-
-            response.append(compressedResponse);
+            try {
+                out.write(response.toString().getBytes("UTF-8"));
+                out.write(compressedResponse);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         else {
             response.append("Content-Length: ")
@@ -76,6 +82,12 @@ public class EchoController extends RequestController{
             //response header end
             response.append(HttpResponseCode.crlf);
             response.append(str);
+
+            try {
+                out.write(response.toString().getBytes("UTF-8"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 
