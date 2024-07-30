@@ -19,7 +19,7 @@ public class GzipCompression implements Compress{
             byteArrayOutputStream = new ByteArrayOutputStream();
             gzip = new GZIPOutputStream(byteArrayOutputStream);
 
-            gzip.write(data.getBytes());
+            gzip.write(data.getBytes("UTF-8"));
             gzip.close();
 
             return byteArrayOutputStream.toByteArray();
